@@ -57,10 +57,10 @@ public class ForcedLayoutBenchmark {
         // generate random links
         Random random = new Random(System.currentTimeMillis());
         for(int i = 0; i < edgeCount; i++) {
-            int from = random.nextInt(nodeCount);
-            int to = random.nextInt(nodeCount);
+            Node fromNode = nodes.get(random.nextInt(nodeCount));
+            Node toNode = nodes.get(random.nextInt(nodeCount));
 
-            edges.add(new StringEdge(nodes.get(from), nodes.get(to)));
+            edges.add(new StringEdge(fromNode, toNode));
         }
 
         layout = LayoutFactory.newInstance()
@@ -73,7 +73,7 @@ public class ForcedLayoutBenchmark {
     }
 
     @Benchmark
-    public void tenRuns(Blackhole sink) {
+    public void benchmark(Blackhole sink) {
         for(int i =0; i < runs; i++){
             layout.layout();
             sink.consume(layout.getNodes());
