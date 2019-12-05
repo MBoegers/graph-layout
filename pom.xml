@@ -6,13 +6,21 @@
 
     <groupId>de.boeg.graph</groupId>
     <artifactId>layout</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <junit.version>5.5.2</junit.version>
         <jmh.version>1.21</jmh.version>
     </properties>
 
+	<!-- Definition for uploading artifact to custom repository -->
+	<distributionManagement>
+	    <repository>
+		<id>github</id>
+		<name>GitHub MBoegers Apache Maven Packages</name>
+		<url>https://maven.pkg.github.com/MBoegers/graph-layout</url>
+	    </repository>
+	</distributionManagement>
 
     <dependencies>
         <dependency>
