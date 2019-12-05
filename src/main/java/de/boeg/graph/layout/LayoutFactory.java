@@ -18,6 +18,11 @@ public class LayoutFactory {
     private int height;
     private int width;
     private LayoutType type;
+    private int defaultEjectFactor;
+    private int defaultSmallDistEjectFactor;
+    private int defaultCondenseFactor;
+    private int maxDeltaX;
+    private int maxDeltaY;
 
     /**
      * None means uncinfigured
@@ -31,6 +36,11 @@ public class LayoutFactory {
         nodeList = new ArrayList<Node>();
         edgeList = new ArrayList<Edge>();
         type = LayoutType.NONE;
+        defaultEjectFactor = 6;
+        defaultSmallDistEjectFactor = 5;
+        defaultCondenseFactor = 3;
+        maxDeltaX = 4;
+        maxDeltaY = 3;
     }
 
     /**
@@ -89,6 +99,39 @@ public class LayoutFactory {
     }
 
     /**
+     * Configures the eject factors of the nodes
+     * Needed for Forced layout type.
+     * @param ejectFactor value that is normally used
+     * @param smallDistEjectFactor value that is used when the distance is small
+     */
+    public LayoutFactory withEjectFactors(int ejectFactor, int smallDistEjectFactor) {
+        this.defaultEjectFactor = ejectFactor;
+        this.defaultSmallDistEjectFactor = smallDistEjectFactor;
+        return this;
+    }
+
+    /**
+     * Configures how big the delta of each direction is allowed to be
+     * @param deltaX may x change
+     * @param deltaY max y change
+     */
+    public LayoutFactory withMaxDeltas(int deltaX, int deltaY) {
+        this.maxDeltaX = deltaX;
+        this.maxDeltaY = deltaY;
+        return this;
+    }
+
+    /**
+     * Configures the condense factor for the edge based layout step.
+     * Needed for Forced layout type
+     * @param condenseFactor value for the nodes
+     */
+    public LayoutFactory withCondenseFactor(int condenseFactor) {
+        this.defaultCondenseFactor = condenseFactor;
+        return this;
+    }
+
+    /**
      * Adds one node to the collection of considered nodes
      *
      * @param node can be null
@@ -118,7 +161,7 @@ public class LayoutFactory {
     public GraphLayout build() {
         switch (type) {
             case FORCE:
-                return new ForceDirectedLayout(nodeList, edgeList, height, width);
+                return new ForceDirectedLayout(nodeList, edgeList, height, width, defaultEjectFactor, defaultSmallDistEjectFactor, defaultCondenseFactor, maxDeltaX, maxDeltaY);
             case NONE:
             default:
                 throw new IllegalStateException("Type of layout need to be set");
