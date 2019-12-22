@@ -102,10 +102,10 @@ class ForceDirectedLayout<T> implements GraphLayout<T> {
             double distX = v.getX() - u.getX();
             double distY = v.getY() - u.getY();
             double dist = Math.sqrt(distX * distX + distY * distY);
-            if (dist < 30) {
+            if (dist < 200) {
                 ejectFactor = defaultSmallDistEjectFactor;
             }
-            if (dist >= 0 && dist < 250) {
+            if (dist >= 0 && dist < 600) {
                 mDxMap.put(target, mDxMap.get(target) + distX / dist * k * k / dist * ejectFactor);
                 mDyMap.put(target, mDyMap.get(target) + distY / dist * k * k / dist * ejectFactor);
             }
@@ -130,10 +130,12 @@ class ForceDirectedLayout<T> implements GraphLayout<T> {
             double distX = startNode.getX() - endNode.getX();
             double distY = startNode.getY() - endNode.getY();
             double dist = Math.sqrt(distX * distX + distY * distY);
-            mDxMap.put(eStartID, mDxMap.get(eStartID) - distX * dist / k * defaultCondenseFactor);
-            mDyMap.put(eStartID, mDyMap.get(eStartID) - distY * dist / k * defaultCondenseFactor);
-            mDxMap.put(eEndID, mDxMap.get(eEndID) + distX * dist / k * defaultCondenseFactor);
-            mDyMap.put(eEndID, mDyMap.get(eEndID) + distY * dist / k * defaultCondenseFactor);
+            if(distX >= 150 && distY >= 350) {
+                mDxMap.put(eStartID, mDxMap.get(eStartID) - distX * dist / k * defaultCondenseFactor);
+                mDyMap.put(eStartID, mDyMap.get(eStartID) - distY * dist / k * defaultCondenseFactor);
+                mDxMap.put(eEndID, mDxMap.get(eEndID) + distX * dist / k * defaultCondenseFactor);
+                mDyMap.put(eEndID, mDyMap.get(eEndID) + distY * dist / k * defaultCondenseFactor);
+            }
         }
     }
 
@@ -141,7 +143,7 @@ class ForceDirectedLayout<T> implements GraphLayout<T> {
      * update the coordinates.
      */
     private void updateCoordinates() {
-        for (Node<T> node : mNodeList) {
+        for (Node<T> node : mNodeList) { // of nodes
             double nodeX = node.getX();
             double nodeY = node.getY();
             int dx = (int) Math.floor(mDxMap.get(node.getIdentifier()));
@@ -152,6 +154,18 @@ class ForceDirectedLayout<T> implements GraphLayout<T> {
 
             node.setX((nodeX + dx) >= canvasWidth || (nodeX + dx) <= 0 ? nodeX - dx : nodeX + dx);
             node.setY((nodeY + dy) >= canvasHeight || (nodeY + dy <= 0) ? nodeY - dy : nodeY + dy);
+        }
+
+        for (Edge<T> edge : mEdgeList) { // of edges
+            T eStartID = edge.getFirstNodeIdentifier();
+            T eEndID = edge.getSecondNodeIdentifier();
+            Node<T> startNode = mNodeMap.get(eStartID);
+            Node<T> endNode = mNodeMap.get(eEndID);
+
+            edge.setX1(startNode.getX());
+            edge.setY1(startNode.getY());
+            edge.setX2(endNode.getX());
+            edge.setY2(endNode.getY());
         }
     }
 }
