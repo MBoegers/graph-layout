@@ -33,8 +33,8 @@ public class LayoutFactory {
     private LayoutFactory() {
         height = 0;
         width = 0;
-        nodeList = new ArrayList<Node>();
-        edgeList = new ArrayList<Edge>();
+        nodeList = new ArrayList<>();
+        edgeList = new ArrayList<>();
         type = LayoutType.NONE;
         defaultEjectFactor = 6;
         defaultSmallDistEjectFactor = 5;
@@ -83,7 +83,7 @@ public class LayoutFactory {
      *
      * @param nodes can be null/empty
      */
-    public LayoutFactory nodes(Collection<Node> nodes) {
+    public LayoutFactory nodes(Collection<? extends Node> nodes) {
         this.nodeList.addAll(nodes);
         return this;
     }
@@ -93,7 +93,7 @@ public class LayoutFactory {
      *
      * @param edges can be null/empty
      */
-    public LayoutFactory edges(Collection<Edge> edges) {
+    public LayoutFactory edges(Collection<? extends Edge> edges) {
         this.edgeList.addAll(edges);
         return this;
     }

@@ -18,6 +18,6 @@ public interface GraphLayout<T> {
      * Get back the nodes, x and y position may be updated by the algorithm
      * @return layout nodes
      */
-    Collection<Node<T>> getNodes();
+    Collection<? extends Node<T>> getNodes();
 }
 
